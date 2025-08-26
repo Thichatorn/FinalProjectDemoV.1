@@ -1,0 +1,16 @@
+# Node.js
+node_modules/
+
+# Env files
+.env
+backend/.env
+
+# Python virtual env (เจอในโปรเจค)
+.venv/
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
