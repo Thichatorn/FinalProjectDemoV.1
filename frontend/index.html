@@ -1,105 +1,113 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mermaid Editor - Diagram Creator</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mermaid Editor - Diagram Creator</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Mermaid JS -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    // ตั้งค่า Mermaid ให้เราควบคุมการเรนเดอร์เอง
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'loose'
+    });
+  </script>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">Mermaid Editor</div>
-            <div class="toolbar">
-                <button class="btn primary" onclick="generateDiagram()">
-                    <span>🔄</span> สร้างไดอะแกรม
-                </button>
-                <div class="examples-dropdown">
-                    <button class="btn" onclick="toggleExamples()">
-                        <span>📋</span> ตัวอย่าง
-                    </button>
-                    <div class="examples-content" id="examplesContent">
-                        <div class="example-item" onclick="loadExample('sequence')">
-                            <div class="example-title">Sequence Diagram</div>
-                            <div class="example-desc">ไดอะแกรมลำดับการทำงาน</div>
-                        </div>
-                        <div class="example-item" onclick="loadExample('class')">
-                            <div class="example-title">Class Diagram</div>
-                            <div class="example-desc">ไดอะแกรมคลาส</div>
-                        </div>
-                        <div class="example-item" onclick="loadExample('flowchart')">
-                            <div class="example-title">Flowchart</div>
-                            <div class="example-desc">ไดอะแกรมโฟลว์</div>
-                        </div>
-                    </div>
-                </div>
-                <button class="btn" onclick="clearEditor()">
-                    <span>🗑️</span> ล้าง
-                </button>
+  <div class="container">
+    <div class="header">
+      <div class="logo">Mermaid Editor</div>
+      <div class="toolbar">
+        <button class="btn primary" onclick="generateDiagram()">
+          <span>🔄</span> สร้างไดอะแกรม
+        </button>
+        <div class="examples-dropdown">
+          <button class="btn" onclick="toggleExamples()">
+            <span>📋</span> ตัวอย่าง
+          </button>
+          <div class="examples-content" id="examplesContent">
+            <div class="example-item" onclick="loadExample('sequence')">
+              <div class="example-title">Sequence Diagram</div>
+              <div class="example-desc">ไดอะแกรมลำดับการทำงาน</div>
             </div>
+            <div class="example-item" onclick="loadExample('class')">
+              <div class="example-title">Class Diagram</div>
+              <div class="example-desc">ไดอะแกรมคลาส</div>
+            </div>
+            <div class="example-item" onclick="loadExample('flowchart')">
+              <div class="example-title">Flowchart</div>
+              <div class="example-desc">ไดอะแกรมโฟลว์</div>
+            </div>
+          </div>
         </div>
+        <button class="btn" onclick="clearEditor()">
+          <span>🗑️</span> ล้าง
+        </button>
+      </div>
+    </div>
 
-        <div class="main-content">
-            <div class="editor-panel">
-                <div class="panel-header">
-                    <span>📝 Mermaid Code</span>
-                    <span id="lineCount">1 บรรทัด</span>
-                </div>
-                <textarea 
-                    class="editor" 
-                    id="umlEditor"
-                    placeholder="graph TD
+    <div class="main-content">
+      <div class="editor-panel">
+        <div class="panel-header">
+          <span>📝 Mermaid Code</span>
+          <span id="lineCount">1 บรรทัด</span>
+        </div>
+        <textarea 
+          class="editor" 
+          id="umlEditor"
+          placeholder="graph TD
 A[Start] --> B{Decision}
 B -- Yes --> C[Do something]
 B -- No --> D[Do something else]
 C --> E[End]
 D --> E"
-                    spellcheck="false"
-                    oninput="updateLineCount()"
-                >sequenceDiagram
+          spellcheck="false"
+          oninput="updateLineCount()"
+        >sequenceDiagram
     participant Alice
     participant Bob
     Alice->>Bob: สวัสดี Bob!
     Bob-->>Alice: สวัสดี Alice!</textarea>
-            </div>
+      </div>
 
-            <div class="preview-panel">
-                <div class="panel-header">
-                    <span>👁️ ตัวอย่างไดอะแกรม</span>
-                    <button class="btn" onclick="generateDiagram()" style="padding: 4px 8px; font-size: 12px;">
-                        รีเฟรช
-                    </button>
-                </div>
-                <div class="preview-content" id="previewContent">
-                    <div class="help-text">
-                        <h3>🎯 วิธีใช้ Mermaid Editor</h3>
-                        <p>1. เขียนโค้ด Mermaid ในช่องด้านซ้าย</p>
-                        <p>2. กดปุ่ม "สร้างไดอะแกรม" เพื่อดูผลลัพธ์</p>
-                        <p>3. เลือกตัวอย่างจากเมนู "ตัวอย่าง" เพื่อเริ่มต้น</p>
-                        <br>
-                        <p><strong>เคล็ดลับ:</strong> กด Ctrl+Enter เพื่อสร้างไดอะแกรมแบบเร็ว</p>
-                    </div>
-                </div>
-            </div>
+      <div class="preview-panel">
+        <div class="panel-header">
+          <span>👁️ ตัวอย่างไดอะแกรม</span>
+          <button class="btn" onclick="generateDiagram()" style="padding: 4px 8px; font-size: 12px;">
+            รีเฟรช
+          </button>
         </div>
-
-        <div class="status-bar">
-            <div>Mermaid Editor - สร้างไดอะแกรมออนไลน์</div>
-            <div id="statusText">พร้อมใช้งาน</div>
+        <div class="preview-content" id="previewContent">
+          <div class="help-text">
+            <h3>🎯 วิธีใช้ Mermaid Editor</h3>
+            <p>1. เขียนโค้ด Mermaid ในช่องด้านซ้าย</p>
+            <p>2. กดปุ่ม "สร้างไดอะแกรม" เพื่อดูผลลัพธ์</p>
+            <p>3. เลือกตัวอย่างจากเมนู "ตัวอย่าง" เพื่อเริ่มต้น</p>
+            <br>
+            <p><strong>เคล็ดลับ:</strong> กด Ctrl+Enter เพื่อสร้างไดอะแกรมแบบเร็ว</p>
+          </div>
         </div>
+      </div>
     </div>
 
-    <script>
-        // Mermaid examples
-        const examples = {
-            sequence: `sequenceDiagram
+    <div class="status-bar">
+      <div>Mermaid Editor - สร้างไดอะแกรมออนไลน์</div>
+      <div id="statusText">พร้อมใช้งาน</div>
+    </div>
+  </div>
+
+  <script>
+    // ===== ตัวอย่างโค้ด =====
+    const examples = {
+      sequence: `sequenceDiagram
     participant Alice
     participant Bob
     Alice->>Bob: สวัสดี Bob!
     Bob-->>Alice: สวัสดี Alice!`,
 
-            class: `classDiagram
+      class: `classDiagram
     Animal <|-- Duck
     Animal <|-- Fish
     Animal <|-- Zebra
@@ -113,148 +121,143 @@ D --> E"
       +quack()
     }`,
 
-            flowchart: `graph TD
+      flowchart: `graph TD
     A[Start] --> B{Decision}
     B -- Yes --> C[Do something]
     B -- No --> D[Do something else]
     C --> E[End]
     D --> E`
-        };
+    };
 
-        // Initialize
+    // เริ่มต้น
+    updateLineCount();
+
+    // ให้เรนเดอร์ตามค่าเริ่มต้นหลังโหลดหน้าเล็กน้อย
+    setTimeout(() => { generateDiagram(); }, 1000);
+
+    function updateLineCount() {
+      const editor = document.getElementById('umlEditor');
+      const lines = editor.value.split('\n').length;
+      document.getElementById('lineCount').textContent = `${lines} บรรทัด`;
+    }
+
+    function updateStatus(message) {
+      document.getElementById('statusText').textContent = message;
+    }
+
+    // แปลงลิสต์เลข 1.,2.,3. เป็นโฟลว์ชาร์ต Mermaid
+    function listToMermaidFlowchart(text) {
+      const lines = text.split('\n').map(line => line.trim()).filter(line => line);
+      let mermaidCode = 'graph TD\n';
+      for (let i = 0; i < lines.length; i++) {
+        const label = lines[i].replace(/^\d+\.\s*/, '');
+        mermaidCode += `    step${i + 1}["${label}"]\n`;
+        if (i > 0) mermaidCode += `    step${i} --> step${i + 1}\n`;
+      }
+      return mermaidCode;
+    }
+
+    // === เรนเดอร์ไดอะแกรม (เวอร์ชันใหม่ ใช้ mermaid.render) ===
+    async function generateDiagram() {
+      let code = document.getElementById('umlEditor').value.trim();
+      if (!code) {
+        showError('กรุณาใส่โค้ด Mermaid หรือ list');
+        return;
+      }
+
+      // ถ้าเป็นลิสต์ 1., 2., 3. → แปลงเป็น Mermaid flowchart
+      if (/^\d+\.\s+/.test(code)) {
+        code = listToMermaidFlowchart(code);
+      }
+
+      showLoading();
+      updateStatus('กำลังสร้างไดอะแกรม...');
+
+      try {
+        const preview = document.getElementById('previewContent');
+        const id = 'mmd-' + Date.now(); // ป้องกันชนกับเรนเดอร์เก่า
+        const { svg } = await mermaid.render(id, code);
+        preview.innerHTML = svg;
+        updateStatus('สร้างไดอะแกรมสำเร็จ');
+      } catch (err) {
+        showError('Mermaid render ล้มเหลว: ' + err);
+      }
+    }
+
+    function showLoading() {
+      const preview = document.getElementById('previewContent');
+      preview.innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <div>กำลังสร้างไดอะแกรม...</div>
+        </div>
+      `;
+    }
+
+    function showError(message) {
+      const preview = document.getElementById('previewContent');
+      preview.innerHTML = `
+        <div class="error">
+          <h3>❌ เกิดข้อผิดพลาด</h3>
+          <p>${message}</p>
+          <br>
+          <p><strong>เคล็ดลับ:</strong></p>
+          <p>• ตรวจสอบ syntax ของ Mermaid</p>
+          <p>• ลองใช้ตัวอย่างจากเมนู "ตัวอย่าง"</p>
+        </div>
+      `;
+    }
+
+    function toggleExamples() {
+      const content = document.getElementById('examplesContent');
+      content.classList.toggle('show');
+    }
+
+    function loadExample(type) {
+      if (examples[type]) {
+        document.getElementById('umlEditor').value = examples[type];
         updateLineCount();
+        toggleExamples();
+        generateDiagram();
+      }
+    }
 
-        // Auto-generate diagram on load
-        setTimeout(() => {
-            generateDiagram();
-        }, 1000);
+    function clearEditor() {
+      if (confirm('คุณต้องการล้างโค้ดทั้งหมดหรือไม่?')) {
+        document.getElementById('umlEditor').value = '';
+        document.getElementById('previewContent').innerHTML = `
+          <div class="help-text">
+            <h3>📝 เริ่มต้นใหม่</h3>
+            <p>เขียนโค้ด Mermaid หรือเลือกตัวอย่างจากเมนู "ตัวอย่าง"</p>
+          </div>
+        `;
+        updateLineCount();
+        updateStatus('ล้างโค้ดแล้ว');
+      }
+    }
 
-        function updateLineCount() {
-            const editor = document.getElementById('umlEditor');
-            const lines = editor.value.split('\n').length;
-            document.getElementById('lineCount').textContent = `${lines} บรรทัด`;
-        }
+    // คีย์ลัด Ctrl/Cmd + Enter
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        generateDiagram();
+      }
+    });
 
-        function updateStatus(message) {
-            document.getElementById('statusText').textContent = message;
-        }
+    // ปิดเมนูตัวอย่างเมื่อคลิกนอก
+    document.addEventListener('click', function(e) {
+      const dropdown = document.querySelector('.examples-dropdown');
+      if (!dropdown.contains(e.target)) {
+        document.getElementById('examplesContent').classList.remove('show');
+      }
+    });
 
-        // เพิ่มฟังก์ชันแปลง list เป็น Mermaid flowchart
-        function listToMermaidFlowchart(text) {
-            const lines = text.split('\n').map(line => line.trim()).filter(line => line);
-            let mermaid = 'graph TD\n';
-            for (let i = 0; i < lines.length; i++) {
-                const label = lines[i].replace(/^\d+\.\s*/, '');
-                mermaid += `    step${i + 1}["${label}"]\n`;
-                if (i > 0) {
-                    mermaid += `    step${i} --> step${i + 1}\n`;
-                }
-            }
-            return mermaid;
-        }
-
-        // แก้ไข generateDiagram ให้รองรับ list
-        function generateDiagram() {
-            let code = document.getElementById('umlEditor').value.trim();
-            if (!code) {
-                showError('กรุณาใส่โค้ด Mermaid หรือ list');
-                return;
-            }
-
-            // ถ้าเป็น list 1. ... 2. ... ให้แปลงเป็น Mermaid
-            if (/^\d+\.\s+/.test(code)) {
-                code = listToMermaidFlowchart(code);
-            }
-
-            showLoading();
-            updateStatus('กำลังสร้างไดอะแกรม...');
-
-            setTimeout(() => {
-                const preview = document.getElementById('previewContent');
-                preview.innerHTML = `<pre class="mermaid">${code}</pre>`;
-                if (window.mermaid) {
-                    mermaid.init(undefined, preview);
-                }
-                updateStatus('สร้างไดอะแกรมสำเร็จ');
-            }, 300);
-        }
-
-        function showLoading() {
-            const preview = document.getElementById('previewContent');
-            preview.innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <div>กำลังสร้างไดอะแกรม...</div>
-                </div>
-            `;
-        }
-
-        function showError(message) {
-            const preview = document.getElementById('previewContent');
-            preview.innerHTML = `
-                <div class="error">
-                    <h3>❌ เกิดข้อผิดพลาด</h3>
-                    <p>${message}</p>
-                    <br>
-                    <p><strong>เคล็ดลับ:</strong></p>
-                    <p>• ตรวจสอบ syntax ของ Mermaid</p>
-                    <p>• ลองใช้ตัวอย่างจากเมนู "ตัวอย่าง"</p>
-                </div>
-            `;
-        }
-
-        function toggleExamples() {
-            const content = document.getElementById('examplesContent');
-            content.classList.toggle('show');
-        }
-
-        function loadExample(type) {
-            if (examples[type]) {
-                document.getElementById('umlEditor').value = examples[type];
-                updateLineCount();
-                toggleExamples();
-                generateDiagram();
-            }
-        }
-
-        function clearEditor() {
-            if (confirm('คุณต้องการล้างโค้ดทั้งหมดหรือไม่?')) {
-                document.getElementById('umlEditor').value = '';
-                document.getElementById('previewContent').innerHTML = `
-                    <div class="help-text">
-                        <h3>📝 เริ่มต้นใหม่</h3>
-                        <p>เขียนโค้ด Mermaid หรือเลือกตัวอย่างจากเมนู "ตัวอย่าง"</p>
-                    </div>
-                `;
-                updateLineCount();
-                updateStatus('ล้างโค้ดแล้ว');
-            }
-        }
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                e.preventDefault();
-                generateDiagram();
-            }
-        });
-
-        // Close examples dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            const dropdown = document.querySelector('.examples-dropdown');
-            if (!dropdown.contains(e.target)) {
-                document.getElementById('examplesContent').classList.remove('show');
-            }
-        });
-
-        // Auto-resize editor
-        function autoResize() {
-            const editor = document.getElementById('umlEditor');
-            editor.style.height = 'auto';
-            editor.style.height = editor.scrollHeight + 'px';
-        }
-    </script>
+    // Auto-resize (เผื่อคุณจะเรียกใช้ภายหลัง)
+    function autoResize() {
+      const editor = document.getElementById('umlEditor');
+      editor.style.height = 'auto';
+      editor.style.height = editor.scrollHeight + 'px';
+    }
+  </script>
 </body>
 </html>
-
-<!-- ดีจ้า -->

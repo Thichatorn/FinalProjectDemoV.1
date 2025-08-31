@@ -35,3 +35,4 @@ export async function chatWithLLM(message) {
 
   return resp.choices?.[0]?.message?.content?.trim() ?? '';
 }
+
